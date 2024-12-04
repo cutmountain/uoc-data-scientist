@@ -1,0 +1,12 @@
+.DS_Store
+.ipynb_checkpoints/
+.virtual_documents/
+
+deliverables/
+ejercicios/
+img/
+labs/
+proyectos/proyecto-final/utils/__pycache__/
+
+proyectos/proyecto-final/notebooks/_test_module_imports.ipynb
+
