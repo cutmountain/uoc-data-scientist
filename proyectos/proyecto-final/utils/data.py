@@ -1,11 +1,10 @@
 """
 Nombre del archivo: data.py
-Autores: Montserrat Lopez, Victor Bassas,  Andres  Henao
-Descripción: Archivo que contiene código útil para tranformar datos para
+Descripción: Archivo que contiene código útil para tranformar datos para el
             proyecto de curso Data Scientist de la UOC
-Creado: 28/10/2024
 Versión: 1.0
-Correos: cutmountain@uoc.edu, vbassasb@uoc.edu, ahenaoa@uoc.edu
+Creado: 4/12/2024
+Autores: Montserrat López Ibáñez
 """
 
 #importes de librerías externas
@@ -37,28 +36,8 @@ class Datasets:
         """
         # Get current working directory
         current_path = os.getcwd()
-
-        # Approach 1) Locate the project root directory by finding "monayvi"        
-        # Locate the project root directory by finding "monayvi"        
-        # aguacate_index = current_path.find("monayvi")
-        # if aguacate_index != -1:
-        #     project_root = current_path[:aguacate_index + len("monayvi")]
-        # else:
-        #     raise FileNotFoundError("The directory 'monayvi' was not found in the path.")
-        
-        # Approach 2) Locate the project root directory by finding "monayvi" or "MONAYVI"              
-        # project_name = 'monayvi'
-        # aguacate_index = current_path.find(project_name)
-        # if aguacate_index == -1:
-        #     project_name = project_name.upper()
-        #     aguacate_index = current_path.find(project_name)
-        # if aguacate_index != -1:
-        #     #project_root = current_path[:aguacate_index + len("monayvi")]
-        #     project_root = current_path[:aguacate_index + len(project_name)]
-        # else:
-        #     raise FileNotFoundError("The directory 'monayvi' was not found in the path.")
-        
-        # Approach 3) Locate the project root directory by finding the last slash "/"
+      
+        # Locate the project root directory by finding the last slash "/"
         last_slash_index = current_path.rfind('/')
         if last_slash_index != -1:
             project_root = current_path[:last_slash_index]
