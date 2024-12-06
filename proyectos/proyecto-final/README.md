@@ -102,9 +102,57 @@ Destacaremos la semántica de algunas de estas columnas:
     before     4337
     ```
 
+A partir de aquí iniciamos el Análisis Exploratorio de Datos propiamente.
 
-OBSERVACIONES:
+<!-- 3. **Análisis de Calidad de los Datos**: Evaluar la calidad de los datos, identificando problemas como valores faltantes, inconsistencias, errores o duplicados. -->
 
-Existe 1 fila con valor tanto en la columna `user_id` como en la columna `deleted_account_id`.
+El análisis de calidad de datos mostró bastantes valores nulos en ambos datasets. Como ejemplo, mostramos el dataset cash_request.
 
+![Mapa de calor de valores nulos en cash_request](figures/p3/p3_calidad_cash.png)
+
+A partir de los mapas de calor de valores nulos, observamos lo siguiente:
+
+- Las columnas `user_id` y `deleted_account_id` son complementarias. De hecho, en un examen más exhaustivo comprobamos que existe 1 fila con valores no nulos tanto en la columna `user_id` como en la columna `deleted_account_id`. No debería darse el caso puesto que la columna `deleted_account_id` sólo tiene valor cuando un usuario ha eliminado su cuenta. ¿Se trata de una cuenta reactivada?
+- La columna `moderated_at` presenta bastantes valores no nulos, señal de que ha habido intervención humana en muchas de las solicitudes.
+- La columna `category` de fees está mayormente por valores nulos. De hecho, comprobamos que tan sólo hay 2.196 valores distintos de Null en esa columna.
+
+<!-- 1. **Análisis de Series de Tiempo**: Realizar un análisis exhaustivo de las tendencias y patrones temporales presentes en los datos. -->
+
+OBSERVACIONES de las SERIES de TIEMPO
+
+- En el dataset cash_request los `id` **no** están ordenados de forma ascendente, como quizá sería esperable en un sistem automático.
+
+<!-- 2. **Análisis Exploratorio de Datos (EDA)**: Identificar patrones, anomalías y relaciones entre las variables mediante visualizaciones y estadísticas descriptivas. -->
+<!-- 4. **Análisis Gráfico de los Datos**: Representar gráficamente las variables mediante gráficos como histogramas, diagramas de dispersión, boxplots, entre otros, para facilitar la comprensión visual de los datos. -->
+
+A continuación mostraremos las columnas categóricas de ambas tablas de forma visual.
+
+![Categóricas en cash_request](figures/p3/p3_eda_cash_categorical.png)
+
+Para el dataset cash_request observamos que:
+
+- 
+- 
+
+![Categóricas en cash_request](figures/p3/p3_eda_fees_categorical.png)
+
+Para el dataset fees observamos que:
+
+- 
+- 
+
+<!-- 5. **Segmentación Inteligente de los Datos**: Implementar técnicas de segmentación avanzadas que aporten valor al análisis y la extracción de insights relevantes. -->
+<!-- 6. **Análisis de Correlación**: Evaluar las relaciones y asociaciones entre las variables mediante matrices de correlación y análisis de dependencias. -->
+<!-- 7. **Análisis de Outliers**: Detectar y tratar los valores atípicos (outliers) presentes en los datos para mejorar la precisión de los modelos. -->
+<!-- 8. **Análisis de Cohortes Avanzados**: Realizar segmentación y análisis del comportamiento de los usuarios a lo largo del tiempo, con el objetivo de identificar patrones de retención, uso y otros comportamientos clave. -->
+<!-- 9. **Modelos de Regresión Regularizados**: Implementar modelos de regresión regularizados (como Ridge, Lasso, ElasticNet), utilizando técnicas de búsqueda de hiperparámetros para optimizar el rendimiento del modelo. -->
+<!-- 10. **Modelos de Clasificación**: Desarrollar y optimizar modelos de clasificación (como árboles de decisión, SVM, k-NN), utilizando los métodos adecuados de validación y evaluación. -->
+<!-- 11. **Validación de Modelos**: Seleccionar los mejores modelos mediante validación cruzada con k-fold, para asegurar la robustez y generalización de los modelos creados. -->
+<!-- 12. **Uso de Scraping para Variables Exógenas**: El proyecto debe incluir el uso de técnicas de web scraping para obtener variables adicionales de fuentes externas que aporten valor a los datos originales del proyecto. -->
+
+
+
+![Tipo de adelante según cohorte](figures/metricas_tipo_adelanto.png)
+
+<img src="./figures/reg_coefs.png" alt="Intercepto y Coeficientes para la Regresión Lineal" width="450" style="margin-left:50px"/>
 
