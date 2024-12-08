@@ -104,17 +104,21 @@ Destacaremos la semántica de algunas de estas columnas:
 
 A partir de aquí iniciamos el Análisis Exploratorio de Datos propiamente.
 
+### Calidad de Datos
+
 <!-- 3. **Análisis de Calidad de los Datos**: Evaluar la calidad de los datos, identificando problemas como valores faltantes, inconsistencias, errores o duplicados. -->
 
 El análisis de calidad de datos mostró bastantes valores nulos en ambos datasets. Como ejemplo, mostramos el dataset cash_request.
 
-![Mapa de calor de valores nulos en cash_request](figures/p3/p3_calidad_cash.png)
+<img src="./figures/p3/p3_calidad_cash.png" alt="Mapa de calor de valores nulos en cash_request" width="800"/>
 
 A partir de los mapas de calor de valores nulos, observamos lo siguiente:
 
 - Las columnas `user_id` y `deleted_account_id` son complementarias. De hecho, en un examen más exhaustivo comprobamos que existe 1 fila con valores no nulos tanto en la columna `user_id` como en la columna `deleted_account_id`. No debería darse el caso puesto que la columna `deleted_account_id` sólo tiene valor cuando un usuario ha eliminado su cuenta. ¿Se trata de una cuenta reactivada?
 - La columna `moderated_at` presenta bastantes valores no nulos, señal de que ha habido intervención humana en muchas de las solicitudes.
 - La columna `category` de fees está mayormente por valores nulos. De hecho, comprobamos que tan sólo hay 2.196 valores distintos de Null en esa columna.
+
+### Series de Tiempo
 
 <!-- 1. **Análisis de Series de Tiempo**: Realizar un análisis exhaustivo de las tendencias y patrones temporales presentes en los datos. -->
 
@@ -125,26 +129,106 @@ OBSERVACIONES de las SERIES de TIEMPO
 <!-- 2. **Análisis Exploratorio de Datos (EDA)**: Identificar patrones, anomalías y relaciones entre las variables mediante visualizaciones y estadísticas descriptivas. -->
 <!-- 4. **Análisis Gráfico de los Datos**: Representar gráficamente las variables mediante gráficos como histogramas, diagramas de dispersión, boxplots, entre otros, para facilitar la comprensión visual de los datos. -->
 
+### Columnas Categóricas
+
 A continuación mostraremos las columnas categóricas de ambas tablas de forma visual.
 
-![Categóricas en cash_request](figures/p3/p3_eda_cash_categorical.png)
+<img src="./figures/p3/p3_eda_cash_categorical.png" alt="Categóricas en cash_request" width="950"/>
 
 Para el dataset cash_request observamos que:
 
-- 
-- 
+- Se ha recuperado el dinero prestado para un 68,4% de las solicitudes.
+- El porcentaje de solicitudes de tipo _instant_ es mayor que las de tipo _regular_, con casi un 58% frente a un 42%.
+- De aquellas solicitudes que presentaron incidentes de pago en el momento del reembolso, un 74% de los incidentes se resolvieron satisfactoriamente.
 
-![Categóricas en cash_request](figures/p3/p3_eda_fees_categorical.png)
+<img src="./figures/p3/p3_eda_fees_categorical.png" alt="Categóricas en fees" width="800"/>
 
 Para el dataset fees observamos que:
 
-- 
-- 
+- Una gran proporción de las cuotas cobradas (52,7%) corresponde a solicitudes de préstamo de tipo _instant_, donde el usuario recibe el dinero de forma inmediata a cambio de esa cuota.
+- A pesar de que la mayor parte de cuotas han sido aceptadas por el usuario (70%), existe un volumen significativo de cuotas canceladas (23,4%). Aunque según la documentación, es posible que parte de éstas sean debidas a ajustes manuales.
+- El motivo para cobrar la cuota se debe principalmente (72,8%) a que el cargo a la tarjeta de crédito en el momento de reembolso del préstamo fue rechazado.
+- El momento en que se cobra la cuota está distribuido en un 80%-20% para las que se cobran después de haber recibido el préstamo, _after_, con respecto a las que se cobran antes de haberlo recibido, _before_.
 
-<!-- 5. **Segmentación Inteligente de los Datos**: Implementar técnicas de segmentación avanzadas que aporten valor al análisis y la extracción de insights relevantes. -->
+### Columnas Numéricas
+
+En cuanto a las columnas numéricas, las únicas de interés son `'amount'` y `'total_amount'`, en el dataset cash_request y en el fees respectivamente.
+
+<img src="./figures/p3/p3_eda_cash_numerical.png" alt="Numéricas en cash_request" width="1200"/>
+<br/><br/>
+<img src="./figures/p3/p3_eda_fees_numerical.png" alt="Numéricas en fees" width="1200"/>
+<br/><br/>
+
+Debido al gran volumen de solicitudes y cuotas de un mismo importe, los gráficos anteriores nos ocultan valores cuyo frecuencia es mucho menor. Es por esto que necesitamos mostrarlos mediante gráficas de caja o de violín.
+
+<img src="./figures/p3/p3_eda_cash_box.png" alt="Boxplot en cash_request" width="1024"/>
+<br/><br/>
+<img src="./figures/p3/p3_eda_fees_box.png" alt="Boxplot en fees" width="1024"/>
+
+<br/><br/>
+
+<img src="./figures/p3/p3_eda_cash_violin.png" alt="Violin en cash_request" width="1024"/>
+<br/><br/>
+<img src="./figures/p3/p3_eda_fees_violin.png" alt="Violin en fees" width="1024"/>
+
+<br/>
+
+La observación de estos gráficos revela lo siguiente:
+
+- La mayor parte de solicitudes son de 100, 50 y 25, tal y como corroboramos con un `value_counts()`. También observamos un pequeño grupo de solicitudes de 200.
+
+```terminal
+amount
+100.0    16094
+50.0      5304
+25.0      1276
+80.0       267
+60.0       190
+70.0       151
+20.0       132
+30.0       114
+40.0       100
+90.0        91
+10.0        57
+200.0       25
+95.0        21
+```
+
+- En cuanto a las cuotas, todas son de 5 a excepción de una que es de 10.
+
+```terminal
+total_amount
+5.0     21060
+10.0        1
+```
+
+### Relaciones entre Columnas Numéricas
+
 <!-- 6. **Análisis de Correlación**: Evaluar las relaciones y asociaciones entre las variables mediante matrices de correlación y análisis de dependencias. -->
 <!-- 7. **Análisis de Outliers**: Detectar y tratar los valores atípicos (outliers) presentes en los datos para mejorar la precisión de los modelos. -->
+
+Los gráficos de dispersión nos permiten ver posibles relaciones entre las distintas variables numéricas.
+
+<img src="./figures/p3/p3_eda_cash_dispersion.png" alt="Dispersión en cash_request" width="1024"/>
+<br/><br/>
+
+A parte de confirmar las observaciones de los gráficos de histograma, caja, y violín, los gráficos de dispersión también revelan esa anomalía que ya habíamos observado en una de las filas de cash_request entre `'user_id'` y `'deleted_account_id'`.
+<br/><br/>
+
+<img src="./figures/p3/p3_eda_fees_dispersion.png" alt="Dispersión en fees" width="1024"/>
+<br/><br/>
+
+Los gráficos de dispersión para fees nos muestran claramente el valor atípico de 10 en `'total_amounbt'`, así como una relación entre `'cash_request_id'` y `'ud'` ya que una misma solicitud puede asociarse a más de una cuota.
+
+<img src="./figures/p3/p3_eda_cash_correlation.png" alt="Correlación en cash_request" width="800"/>
+<br/><br/>
+<img src="./figures/p3/p3_eda_fees_correlation.png" alt="Correlación en fees" width="800"/>
+
+## Análisis de Cohortes
+
+<!-- 5. **Segmentación Inteligente de los Datos**: Implementar técnicas de segmentación avanzadas que aporten valor al análisis y la extracción de insights relevantes. -->
 <!-- 8. **Análisis de Cohortes Avanzados**: Realizar segmentación y análisis del comportamiento de los usuarios a lo largo del tiempo, con el objetivo de identificar patrones de retención, uso y otros comportamientos clave. -->
+
 <!-- 9. **Modelos de Regresión Regularizados**: Implementar modelos de regresión regularizados (como Ridge, Lasso, ElasticNet), utilizando técnicas de búsqueda de hiperparámetros para optimizar el rendimiento del modelo. -->
 <!-- 10. **Modelos de Clasificación**: Desarrollar y optimizar modelos de clasificación (como árboles de decisión, SVM, k-NN), utilizando los métodos adecuados de validación y evaluación. -->
 <!-- 11. **Validación de Modelos**: Seleccionar los mejores modelos mediante validación cruzada con k-fold, para asegurar la robustez y generalización de los modelos creados. -->
