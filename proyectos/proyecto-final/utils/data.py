@@ -87,7 +87,7 @@ class Datasets:
         
         # -- cash_request -----------------------------------------
         # Rename 'id' to 'cash_request_id'
-        self.cash.rename(columns={'id': 'cash_request_id'}, inplace=True)
+        #self.cash.rename(columns={'id': 'cash_request_id'}, inplace=True)
 
         # Create 'id_usuario' column based on 'user_id' and 'deleted_account_id'
         self.cash['id_usuario'] = self.cash['user_id'].fillna(self.cash['deleted_account_id'])
@@ -98,7 +98,9 @@ class Datasets:
         self.cash['updated_at'] = pd.to_datetime(self.cash['updated_at'])        
         self.cash['moderated_at'] = pd.to_datetime(self.cash['moderated_at'], format='mixed')        
         self.cash['reimbursement_date'] = pd.to_datetime(self.cash['reimbursement_date'], format='mixed')        
-        self.cash['cash_request_received_date'] = pd.to_datetime(self.cash['cash_request_received_date'])        
+        #self.cash['cash_request_received_date'] = pd.to_datetime(self.cash['cash_request_received_date'])        
+        #self.cash['cash_request_received_date'] = pd.to_datetime(self.cash['cash_request_received_date'], format='mixed')        
+        self.cash['cash_request_received_date'] = pd.to_datetime(self.cash['cash_request_received_date'], utc=True)        
         self.cash['money_back_date'] = pd.to_datetime(self.cash['money_back_date'], format='mixed')        
         self.cash['send_at'] = pd.to_datetime(self.cash['send_at'], format='mixed')        
         self.cash['reco_creation'] = pd.to_datetime(self.cash['reco_creation'])        
@@ -146,10 +148,13 @@ class Datasets:
         Returns:
         pd.DataFrame: the result of merging DataFrames 'cash_request' and 'fees'
         """
-        # Añadir prefijo a columnas tabla fees
-        cash_copy = self.cash.copy()
-        fees_copy = self.fees.copy()        
         
+        # Rename 'id' to 'cash_request_id'        
+        cash_copy = self.cash.copy()
+        cash_copy.rename(columns={'id': 'cash_request_id'}, inplace=True)
+        
+        # Añadir prefijo a columnas tabla fees
+        fees_copy = self.fees.copy()                
         fees_prefixed = fees_copy.add_prefix('fee_')
 
         merged = pd.merge(cash_copy, fees_prefixed, left_on='cash_request_id', right_on='fee_cash_request_id', how='outer') # 32098 rows

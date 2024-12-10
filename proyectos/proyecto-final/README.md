@@ -1,6 +1,6 @@
 # Business Payments: EDA and Modelling
 
-Resumen ejecutivo para el proyecto final "Análisis de Business Payments" del curso [UOC](https://www.uoc.edu) Data Scientist.
+Resumen para el proyecto final "Análisis de Business Payments" del curso [UOC](https://www.uoc.edu) Data Scientist.
 
 Versión: 1.0
 
@@ -13,13 +13,13 @@ Autores: Montserrat López Ibáñez
 
 Proyecto de análisis de datos, sobre los cuales se aplicará un modelo de regresión regularizado, así como un modelo de clasificación.
 
-Los datos iniciales son dos datasets:
+Los datos iniciales son dos datasets relativos a un servicio de préstamos sin interés, pero por los cuales se cobran determinadas cuotas según sea el tipo de préstamo y/o si ha habido retrasos en la devolución del capital solicitado:
 - `cash_request.csv`: Contiene las solicitudes de préstamo.
-- `fees.csv`: Contiene las cuotas cobradas 
+- `fees.csv`: Contiene las cuotas cobradas. 
 
 El excel Lexique-Data_Analyst.xlsx contiene la semántica de los datos.
 
-## Análisis Exploratorio de Datos (EDA)
+# Análisis Exploratorio de Datos (EDA)
 
 ### Dataset cash_request
 
@@ -104,7 +104,7 @@ Destacaremos la semántica de algunas de estas columnas:
 
 A partir de aquí iniciamos el Análisis Exploratorio de Datos propiamente.
 
-### Calidad de Datos
+## Calidad de Datos
 
 <!-- 3. **Análisis de Calidad de los Datos**: Evaluar la calidad de los datos, identificando problemas como valores faltantes, inconsistencias, errores o duplicados. -->
 
@@ -114,34 +114,65 @@ El análisis de calidad de datos mostró bastantes valores nulos en ambos datase
 
 A partir de los mapas de calor de valores nulos, observamos lo siguiente:
 
+`cash_request`
+
 - Las columnas `user_id` y `deleted_account_id` son complementarias. De hecho, en un examen más exhaustivo comprobamos que existe 1 fila con valores no nulos tanto en la columna `user_id` como en la columna `deleted_account_id`. No debería darse el caso puesto que la columna `deleted_account_id` sólo tiene valor cuando un usuario ha eliminado su cuenta. ¿Se trata de una cuenta reactivada?
 - La columna `moderated_at` presenta bastantes valores no nulos, señal de que ha habido intervención humana en muchas de las solicitudes.
-- La columna `category` de fees está mayormente por valores nulos. De hecho, comprobamos que tan sólo hay 2.196 valores distintos de Null en esa columna.
 
-### Series de Tiempo
+`fees`
+
+- La columna `category` está mayormente por valores nulos. De hecho, comprobamos que tan sólo hay 2.196 valores distintos de Null en esa columna.
+
+## Series de Tiempo
 
 <!-- 1. **Análisis de Series de Tiempo**: Realizar un análisis exhaustivo de las tendencias y patrones temporales presentes en los datos. -->
 
-OBSERVACIONES de las SERIES de TIEMPO
+Si aplicamos la descomposición en Series de Tiempo, por ejemplo, en el dataset `cash_request`, obtendremos los siguientes gráficos para la columna `'id'`.
 
-- En el dataset cash_request los `id` **no** están ordenados de forma ascendente, como quizá sería esperable en un sistem automático.
+<img src="./figures/p3/p3_serie_cash_id.png" alt="Serie de Tiempo para cash_request.id" width="950"/>
 
-<!-- 2. **Análisis Exploratorio de Datos (EDA)**: Identificar patrones, anomalías y relaciones entre las variables mediante visualizaciones y estadísticas descriptivas. -->
+Aunque ya se percibe una cierta tendencia, no vemos lo que podríamos esperar: en un sistema automático, esperaríamos que los `'id'` fueran consecutivos y en orden ascendente. Para ver si estamos en lo cierto, vamos a aplicar la descomposición nuevamente pero **ordenando previamente los datos a partir de la columna `'created_at'`**.
+
+<img src="./figures/p3/p3_sorted_serie_cash_id.png" alt="Serie de Tiempo ORDENADA para cash_request.id" width="950"/>
+<br/><br/>
+
+Ahora sí! Aunque con alguna pequeña anomalía, esto es más lo que esperábamos.
+
+Comprobamos manualmente esa anomalía consistente en algunos valores faltantes para `'id'` entre 5.124 y 5.330:
+
+<img src="./figures/p3/p3_sorted_serie_cash_id_missing.png" alt="Código para mostrar los valores faltantes" width="650" style="margin-left:50px"/>
+
+<img src="./figures/p3/p3_sorted_serie_cash_id_missing_values_highlight.png" alt="Valores faltantes resaltados" width="450" style="margin-left:50px"/>
+
+Por tanto, al hacer el análisis de series de tiempo es importante **ordenar por fecha** para poder observar claramente las tendencias y los patrones temporales presentes en los datos.
+
+La observación más reseñable del análisis de series de tiempo es la tendencia del importe de los préstamos: poco a poco los importes son menores; la gráfica de tendencia va en descenso, lento pero gradual. Los préstamos de 200 se concentran al principio de la serie y luego desaparecen. Igualmente, se observa que los importes descienden de 100 a 50, y finalmente a 25, como valores preponderantes.
+
+<img src="./figures/p3/p3_sorted_serie_cash_amount_trend.png" alt="Serie de Tiempo ORDENADA para cash_request.amount (trend)" width="1024"/>
+
+También, el volumen de `'deleted_account_id'`, que disminuye hacia el final de la serie (esto es interpretable a partir del trazo, más oblicuo al enlazar los últimos valores de la serie). Esto es muy relevante porque significa que la tasa de abandono ya no es tan elevada.
+
+<img src="./figures/p3/p3_sorted_serie_cash_deleted_account_id_trend.png" alt="Serie de Tiempo ORDENADA para cash_request.deleted_account_id (trend)" width="1024"/>
+
+
+## Columnas Categóricas
+
 <!-- 4. **Análisis Gráfico de los Datos**: Representar gráficamente las variables mediante gráficos como histogramas, diagramas de dispersión, boxplots, entre otros, para facilitar la comprensión visual de los datos. -->
-
-### Columnas Categóricas
 
 A continuación mostraremos las columnas categóricas de ambas tablas de forma visual.
 
 <img src="./figures/p3/p3_eda_cash_categorical.png" alt="Categóricas en cash_request" width="950"/>
+<br/><br/>
 
 Para el dataset cash_request observamos que:
 
 - Se ha recuperado el dinero prestado para un 68,4% de las solicitudes.
 - El porcentaje de solicitudes de tipo _instant_ es mayor que las de tipo _regular_, con casi un 58% frente a un 42%.
 - De aquellas solicitudes que presentaron incidentes de pago en el momento del reembolso, un 74% de los incidentes se resolvieron satisfactoriamente.
+<br/><br/>
 
 <img src="./figures/p3/p3_eda_fees_categorical.png" alt="Categóricas en fees" width="800"/>
+<br/><br/>
 
 Para el dataset fees observamos que:
 
@@ -150,30 +181,31 @@ Para el dataset fees observamos que:
 - El motivo para cobrar la cuota se debe principalmente (72,8%) a que el cargo a la tarjeta de crédito en el momento de reembolso del préstamo fue rechazado.
 - El momento en que se cobra la cuota está distribuido en un 80%-20% para las que se cobran después de haber recibido el préstamo, _after_, con respecto a las que se cobran antes de haberlo recibido, _before_.
 
-### Columnas Numéricas
+## Columnas Numéricas
 
-En cuanto a las columnas numéricas, las únicas de interés son `'amount'` y `'total_amount'`, en el dataset cash_request y en el fees respectivamente.
+En cuanto a las columnas numéricas, las únicas de interés son `'amount'` y `'total_amount'`, en el dataset `cash_request` y en el `fees` respectivamente.
 
 <img src="./figures/p3/p3_eda_cash_numerical.png" alt="Numéricas en cash_request" width="1200"/>
 <br/><br/>
-<img src="./figures/p3/p3_eda_fees_numerical.png" alt="Numéricas en fees" width="1200"/>
-<br/><br/>
 
-Debido al gran volumen de solicitudes y cuotas de un mismo importe, los gráficos anteriores nos ocultan valores cuyo frecuencia es mucho menor. Es por esto que necesitamos mostrarlos mediante gráficas de caja o de violín.
-
-<img src="./figures/p3/p3_eda_cash_box.png" alt="Boxplot en cash_request" width="1024"/>
-<br/><br/>
-<img src="./figures/p3/p3_eda_fees_box.png" alt="Boxplot en fees" width="1024"/>
-
-<br/><br/>
+Debido al gran volumen de solicitudes y cuotas de un mismo importe, los gráficos anteriores nos ocultan valores cuya frecuencia es mucho menor. Es por esto que necesitamos mostrarlos mediante gráficas de caja o de violín.
 
 <img src="./figures/p3/p3_eda_cash_violin.png" alt="Violin en cash_request" width="1024"/>
 <br/><br/>
-<img src="./figures/p3/p3_eda_fees_violin.png" alt="Violin en fees" width="1024"/>
 
-<br/>
+Ahora sí vemos claramente los valores atípicos en 200.
 
-La observación de estos gráficos revela lo siguiente:
+Lo mismo ocurre con el dataset `fees`, donde el valor atípico de 10 queda oculto en el histograma.
+
+<img src="./figures/p3/p3_eda_fees_numerical.png" alt="Numéricas en fees" width="1200"/>
+<br/><br/>
+
+En este caso el boxplot es suficiente para resaltar claramente ese valor atípico.
+
+<img src="./figures/p3/p3_eda_fees_box.png" alt="Boxplot en fees" width="1024"/>
+<br/><br/>
+
+Aí, la observación de los gráficos anteriores revela lo siguiente:
 
 - La mayor parte de solicitudes son de 100, 50 y 25, tal y como corroboramos con un `value_counts()`. También observamos un pequeño grupo de solicitudes de 200.
 
@@ -202,8 +234,9 @@ total_amount
 10.0        1
 ```
 
-### Relaciones entre Columnas Numéricas
+## Relaciones entre Columnas Numéricas
 
+<!-- 2. **Análisis Exploratorio de Datos (EDA)**: Identificar patrones, anomalías y relaciones entre las variables mediante visualizaciones y estadísticas descriptivas. -->
 <!-- 6. **Análisis de Correlación**: Evaluar las relaciones y asociaciones entre las variables mediante matrices de correlación y análisis de dependencias. -->
 <!-- 7. **Análisis de Outliers**: Detectar y tratar los valores atípicos (outliers) presentes en los datos para mejorar la precisión de los modelos. -->
 
@@ -218,13 +251,13 @@ A parte de confirmar las observaciones de los gráficos de histograma, caja, y v
 <img src="./figures/p3/p3_eda_fees_dispersion.png" alt="Dispersión en fees" width="1024"/>
 <br/><br/>
 
-Los gráficos de dispersión para fees nos muestran claramente el valor atípico de 10 en `'total_amounbt'`, así como una relación entre `'cash_request_id'` y `'ud'` ya que una misma solicitud puede asociarse a más de una cuota.
+Los gráficos de dispersión para fees nos muestran claramente el valor atípico de 10 en `'total_amount'`, así como una relación entre `'cash_request_id'` y `'id'` ya que una misma solicitud puede asociarse a más de una cuota debido a distintos incidentes o retrasos en el pago.
 
 <img src="./figures/p3/p3_eda_cash_correlation.png" alt="Correlación en cash_request" width="800"/>
 <br/><br/>
 <img src="./figures/p3/p3_eda_fees_correlation.png" alt="Correlación en fees" width="800"/>
 
-## Análisis de Cohortes
+# Análisis de Cohortes
 
 <!-- 5. **Segmentación Inteligente de los Datos**: Implementar técnicas de segmentación avanzadas que aporten valor al análisis y la extracción de insights relevantes. -->
 <!-- 8. **Análisis de Cohortes Avanzados**: Realizar segmentación y análisis del comportamiento de los usuarios a lo largo del tiempo, con el objetivo de identificar patrones de retención, uso y otros comportamientos clave. -->
