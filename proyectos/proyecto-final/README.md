@@ -255,6 +255,7 @@ Los gráficos de dispersión para fees nos muestran claramente el valor atípico
 <img src="./figures/p3/p3_eda_cash_correlation.png" alt="Correlación en cash_request" width="800"/>
 <br/><br/>
 <img src="./figures/p3/p3_eda_fees_correlation.png" alt="Correlación en fees" width="800"/>
+<br/><br/>
 
 # Análisis de Cohortes
 
@@ -262,9 +263,55 @@ Los gráficos de dispersión para fees nos muestran claramente el valor atípico
 <!-- 7. **Análisis de Outliers**: Detectar y tratar los valores atípicos (outliers) presentes en los datos para mejorar la precisión de los modelos. -->
 <!-- 8. **Análisis de Cohortes Avanzados**: Realizar segmentación y análisis del comportamiento de los usuarios a lo largo del tiempo, con el objetivo de identificar patrones de retención, uso y otros comportamientos clave. -->
 
+Se han creado cohortes de nacimiento según el mes de la primera solicitud, y se ha obtenido el número de usuarios en cada una de las cohortes, siendo la de Octubre/2020 (COH-12.Oct/2020) la más numerosa con diferencia.
+
+<img src="./figures/p3/p3_cohortes.png" alt="Cohortes de nacimiento" width="800"/>
+<br/><br/>
+
+Sin embargo, a pesar de que la cohorte COH-12.Oct/2020 es la que tiene mayor base de usuarios nuevos, en junio se han producido más solicitudes, lo que significa mayor ratio de solicitudes por usuario. También se nota el efecto de las vacaciones en agosto, con menos solicitudes.
+
+En cuanto a la frecuencia de uso por cohorte, vemos que las cohortes más nuevas repiten en el uso del servicio (como se ve en la altura de cada una de las franjas de color a lo largo del tiempo), sobre todo a partir de la cohorte COH-08.Jun/2020, trazada en gris.
+
+<img src="./figures/p3/p3_cohortes_frecuencia_peticiones.png" alt="Frecuencia de uso por cohorte" width="800"/>
+<br/><br/>
+
+Las cohortes que utilizaron el servicio por primera vez entre mayo y julio de 2020 son las que presentan mayor tasa de incidencias, alrededor del 10%.
+
+<img src="./figures/p3/p3_cohortes_incidentes.png" alt="Tasa de incidentes por cohorte" width="800"/>
+<br/><br/>
+
+Los ingresos por cohorte aumentan significativamente a partir de junio 2020, lo cual tiene sentido puesto que era también el momento en que habíamos observado una mayor adopción del servicio. Destacan los ingresos de la cohorte de octubre 2020, pero como no disponemos de demasiados datos posteriores, no puede asegurarse que vaya a mantenerse en los meses posteriores o si es un pico puntual.
+
+<img src="./figures/p3/p3_cohortes_ingresos.png" alt="Volumen de ingresos por cohorte" width="800"/>
+<br/><br/>
+
+Las cohortes a partir de mayo y hasta octubre inicialmente muestran ingresos ascendentes. Pero el ascenso no es sostenido y los ingresos descienden de nuevo. Esto podría significar una cierta estacionalidad en la demanda del servicio.
+
+<img src="./figures/p3/p3_cohortes_evolucion_ingresos.png" alt="Evolución de ingresos por cohorte" width="800"/>
+<br/><br/>
+
 # Modelos de Regresión Regularizados
 
 <!-- 9. **Modelos de Regresión Regularizados**: Implementar modelos de regresión regularizados (como Ridge, Lasso, ElasticNet), utilizando técnicas de búsqueda de hiperparámetros para optimizar el rendimiento del modelo. -->
+
+## Preprocesamiento de Variables Categóricas
+
+Para poder incluir la característica `'category'` en el modelo de regresión, es necesario el análisis de esa columna en detalle. De las 21.061 filas en el dataset fees, tan sólo 2.196 filas tienen un valor no nulo en `'category'`. Dichas filas corresponden, además, a cuotas generadas a partir de incidentes de pago, es decir, para esas filas, la columna `'type'` tiene valor `'incident'`.
+
+<img src="./figures/p3/p3_eda_fees_category.png" alt="fees.category value_counts()" width="250" style="margin-left:50px"/>
+
+Si nos fijamos en la columna `'reason'`, entonces podemos rellenar los valores faltantes para `'category'`.
+
+<img src="./figures/p3/p3_preprocessing_fees_category_apply.png" alt="fees.category fill values" width="1024" style="margin-left:50px"/>
+
+Así conseguimos eliminar los nulos en esa columna.
+
+<img src="./figures/p3/p3_preprocessing_fees_category.png" alt="fees.category value_counts() after preprocessing" width="250" style="margin-left:50px"/>
+
+
+
+
+
 
 # Modelos de Clasificación
 
@@ -274,7 +321,6 @@ Los gráficos de dispersión para fees nos muestran claramente el valor atípico
 
 
 
-![Tipo de adelante según cohorte](figures/metricas_tipo_adelanto.png)
+# Insights
 
-<img src="./figures/reg_coefs.png" alt="Intercepto y Coeficientes para la Regresión Lineal" width="450" style="margin-left:50px"/>
-
+- A pesar de que el volumen de solicitudes _instant_ es mucho mayor, si observamos los 100 clientes que aportan mayor beneficio entonces adquieren mayor preponderancia las solicitudes _regular_ donde se ha cobrado una cuota por retraso en el pago (valor _pospone_ asignado artificialmente a `'fee_category'`).
