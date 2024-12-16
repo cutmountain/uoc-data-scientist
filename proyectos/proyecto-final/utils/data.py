@@ -276,7 +276,7 @@ class Datasets:
 
     #     return merged_dummy   
 
-    def create_cash_cohorts(self):
+    def create_cash_cohorts(self, tabla):
         """
         Process the cash DataFrame to create the 'cash_cohorts' DataFrame.
 
@@ -303,7 +303,7 @@ class Datasets:
         # self.cash['created_at'] = pd.to_datetime(self.cash['created_at'])
 
         # Group by 'id_usuario' and find the minimum 'created_at'
-        grouped1st = self.cash.pivot_table(
+        grouped1st = tabla.pivot_table(
             values="created_at",
             index="id_usuario",
             aggfunc="min"
@@ -324,7 +324,7 @@ class Datasets:
         labels = dict(zip(claves, valores))
 
         # Merge 'cohorte' information into the original cash DataFrame
-        cash_cohorts = pd.merge(self.cash.copy(), grouped1st[['cohorte']], on='id_usuario')
+        cash_cohorts = pd.merge(tabla.copy(), grouped1st[['cohorte']], on='id_usuario')
 
         # Add 'cohorte_lbl' column
         cash_cohorts['cohorte_lbl'] = cash_cohorts['cohorte'].transform(lambda x: labels[x])
@@ -363,7 +363,7 @@ class Datasets:
         pd.DataFrame: A DataFrame containing the number of unique users for each cohort.
         """
         # First, ensure 'cash_cohorts' is available
-        cash_cohorts = self.create_cash_cohorts()
+        cash_cohorts = self.create_cash_cohorts(self.cash)
 
         # Calculate the number of users by cohort
         users_by_cohort = cash_cohorts.groupby('cohorte_lbl')['id_usuario'].nunique().reset_index()
