@@ -363,7 +363,7 @@ Así conseguimos eliminar los nulos en esa columna.
 <img src="./figures/p3/p3_regresion_dispersion.png" alt="Dispersion" width="800"/>
 <br/><br/>
 
-<div width="100%" style="align:left">
+<!--<div width="100%" style="align:left">
 <div width="24%" style="display:inline-block;vertical-align:top">
 <img src="./figures/p3/p3_regresion_poly2.png" alt="Regresion polinómica grado 2" width="200" style="margin-left:10px"/></div>
 <div width="24%" style="display:inline-block;vertical-align:top">
@@ -372,6 +372,14 @@ Así conseguimos eliminar los nulos en esa columna.
 <img src="./figures/p3/p3_regresion_poly4.png" alt="Regresion polinómica grado 4" width="200" style="margin-left:10px"/></div>
 <div width="24%" style="display:inline-block;vertical-align:top">
 <img src="./figures/p3/p3_regresion_poly5.png" alt="Regresion polinómica grado 5" width="200" style="margin-left:10px"/></div>
+</div>
+<br/><br/>-->
+
+<div width="100%" style="align:left">
+<img src="./figures/p3/p3_regresion_poly2.png" alt="Regresion polinómica grado 2" width="200" style="margin-left:10px"/>
+<img src="./figures/p3/p3_regresion_poly3.png" alt="Regresion polinómica grado 3" width="200" style="margin-left:10px"/>
+<img src="./figures/p3/p3_regresion_poly4.png" alt="Regresion polinómica grado 4" width="200" style="margin-left:10px"/>
+<img src="./figures/p3/p3_regresion_poly5.png" alt="Regresion polinómica grado 5" width="200" style="margin-left:10px"/>
 </div>
 <br/><br/>
 
