@@ -309,6 +309,38 @@ Así conseguimos eliminar los nulos en esa columna.
 <img src="./figures/p3/p3_preprocessing_fees_category.png" alt="fees.category value_counts() after preprocessing" width="250" style="margin-left:50px"/>
 <br/><br/>
 
+## Modelo Predictivo
+
+<img src="./figures/p3/p3_regresion_correlacion_pearson.png" alt="Correlacion pearson" width="800"/>
+<br/><br/>
+
+<img src="./figures/p3/p3_regresion_dispersion.png" alt="Dispersion" width="800"/>
+<br/><br/>
+
+<div width="100%" style="align:left">
+<div width="25%" style="display:inline-block;vertical-align:top">
+<img src="./figures/p3/p3_regresion_poly2.png" alt="Regresion polinómica grado 2" width="200" style="margin-left:10px"/></div>
+<div width="25%" style="display:inline-block;vertical-align:top">
+<img src="./figures/p3/p3_regresion_poly3.png" alt="Regresion polinómica grado 3" width="200" style="margin-left:10px"/></div>
+<div width="25%" style="display:inline-block;vertical-align:top">
+<img src="./figures/p3/p3_regresion_poly4.png" alt="Regresion polinómica grado 4" width="200" style="margin-left:10px"/></div>
+<div width="25%" style="display:inline-block;vertical-align:top">
+<img src="./figures/p3/p3_regresion_poly5.png" alt="Regresion polinómica grado 5" width="200" style="margin-left:10px"/></div>
+</div>
+<br/><br/>
+
+<img src="./figures/p3/p3_regresion_poly2_score.png" alt="Score" width="350" style="margin-left:50px"/>
+<br/><br/>
+
+<img src="./figures/p3/p3_regresion_poly2_yhat.png" alt="Prediccion contra valores reales" width="800"/>
+<br/><br/>
+
+<img src="./figures/p3/p3_regresion_poly2_residuos.png" alt="Residuo" width="800"/>
+<br/><br/>
+
+<img src="./figures/p3/p3_regresion_poly2_error.png" alt="Error" width="800"/>
+<br/><br/>
+
 # Modelos de Clasificación
 
 <!-- 10. **Modelos de Clasificación**: Desarrollar y optimizar modelos de clasificación (como árboles de decisión, SVM, k-NN), utilizando los métodos adecuados de validación y evaluación. -->
