@@ -290,6 +290,52 @@ Las cohortes a partir de mayo y hasta octubre inicialmente muestran ingresos asc
 <img src="./figures/p3/p3_cohortes_evolucion_ingresos.png" alt="Evolución de ingresos por cohorte" width="800"/>
 <br/><br/>
 
+
+# Modelos de Clasificación
+
+<!-- 10. **Modelos de Clasificación**: Desarrollar y optimizar modelos de clasificación (como árboles de decisión, SVM, k-NN), utilizando los métodos adecuados de validación y evaluación. -->
+<!-- 11. **Validación de Modelos**: Seleccionar los mejores modelos mediante validación cruzada con k-fold, para asegurar la robustez y generalización de los modelos creados. -->
+
+Utilizaremos un modelo de clasificación para ver si podemos discriminar a los usuarios entre los que pueden llegar a ser potencialmente _Top Users_ y los que no. Para ello, en el dataset combinado de cash_request y fees, crearemos una columna adicional `'top_user'` para las solicitudes de aquellos usuarios (los 1000 mejores) que aportan mayor beneficio a la empresa.
+
+Probaremos primero con el modelo de clasificación supervisada _K-Nearest Neighbors_. Para ello, estableceremos como etiqueta esa columna `'top_user'` y, como características, el resto de columnas del dataset combinado que sean susceptibles de aportar información y ser convertidas a numérico. Para empezar, probaremos con el valor `n_neighbors = 10`.
+
+<img src="./figures/p3/p3_clasificacion_top_users.png" alt="Feature Extraction Top 1000 Users" width="650" style="margin-left:50px"/>
+<br/><br/>
+
+<img src="./figures/p3/p3_clasificacion_etiqueta.png" alt="Etiqueta para Modelo de Clasificación Supervisado" width="300" style="margin-left:50px"/>
+<br/><br/>
+
+<img src="./figures/p3/p3_clasificacion_modelo_knn.png" alt="Modelo K-Nearest Neighbors con n_neighbors=10" width="250" style="margin-left:50px"/>
+<br/><br/>
+
+
+<div width="100%" style="align:left">
+<div width="50%" style="display:inline-block;vertical-align:top">
+<img src="./figures/p3/p3_clasificacion_knn_accuracy_train.png" alt="Accuracy Train" width="350"/><br/>
+<img src="./figures/p3/p3_clasificacion_knn_matrix_train.png" alt="Confusion Matrix Train" width="600" style="margin-left:10px"/></div>
+<div width="50%" style="display:inline-block;vertical-align:top">
+<img src="./figures/p3/p3_clasificacion_knn_accuracy_test.png" alt="Accuracy Test" width="350"/><br/>
+<img src="./figures/p3/p3_clasificacion_knn_matrix_test.png" alt="Confusion Matrix Test" width="582" style="margin-left:10px"/></div>
+</div>
+
+## Validación Cruzada
+
+<img src="./figures/p3/p3_clasificacion_knn_mean_accuracy.png" alt="Mean accuracy after 10 attempts" width="650"/>
+<br/><br/>
+
+<img src="./figures/p3/p3_clasificacion_kfold.png" alt="Cross-Validation Results" width="1024"/>
+<br/><br/>
+
+## Curvas de Aprendizaje
+
+<img src="./figures/p3/p3_clasificacion_curva_aprendizaje_knn3.png" alt="Learning Curve for KNN with n_neighbors=3" width="800"/>
+<br/><br/>
+
+<img src="./figures/p3/p3_clasificacion_curva_aprendizaje_decisiontree.png" alt="Learning Curve for Decision Tree with C=5" width="800"/>
+<br/><br/>
+
+
 # Modelos de Regresión Regularizados
 
 <!-- 9. **Modelos de Regresión Regularizados**: Implementar modelos de regresión regularizados (como Ridge, Lasso, ElasticNet), utilizando técnicas de búsqueda de hiperparámetros para optimizar el rendimiento del modelo. -->
@@ -341,53 +387,6 @@ Así conseguimos eliminar los nulos en esa columna.
 <img src="./figures/p3/p3_regresion_poly2_error.png" alt="Error" width="800"/>
 <br/><br/>
 
-# Modelos de Clasificación
-
-<!-- 10. **Modelos de Clasificación**: Desarrollar y optimizar modelos de clasificación (como árboles de decisión, SVM, k-NN), utilizando los métodos adecuados de validación y evaluación. -->
-<!-- 11. **Validación de Modelos**: Seleccionar los mejores modelos mediante validación cruzada con k-fold, para asegurar la robustez y generalización de los modelos creados. -->
-
-Utilizaremos un modelo de clasificación para ver si podemos discriminar a los usuarios entre los que pueden llegar a ser potencialmente _Top Users_ y los que no. Para ello, en el dataset combinado de cash_request y fees, crearemos una columna adicional `'top_user'` para las solicitudes de aquellos usuarios (los 1000 mejores) que aportan mayor beneficio a la empresa.
-
-Probaremos primero con el modelo de clasificación supervisada _K-Nearest Neighbors_. Para ello, estableceremos como etiqueta esa columna `'top_user'` y, como características, el resto de columnas del dataset combinado que sean susceptibles de aportar información y ser convertidas a numérico. Para empezar, probaremos con el valor `n_neighbors = 10`.
-
-<img src="./figures/p3/p3_clasificacion_top_users.png" alt="Feature Extraction Top 1000 Users" width="650" style="margin-left:50px"/>
-<br/><br/>
-
-<img src="./figures/p3/p3_clasificacion_etiqueta.png" alt="Etiqueta para Modelo de Clasificación Supervisado" width="300" style="margin-left:50px"/>
-<br/><br/>
-
-<img src="./figures/p3/p3_clasificacion_modelo_knn.png" alt="Modelo K-Nearest Neighbors con n_neighbors=10" width="250" style="margin-left:50px"/>
-<br/><br/>
-
-
-<div width="100%" style="align:left">
-<div width="50%" style="display:inline-block;vertical-align:top">
-<img src="./figures/p3/p3_clasificacion_knn_accuracy_train.png" alt="Accuracy Train" width="350"/><br/>
-<img src="./figures/p3/p3_clasificacion_knn_matrix_train.png" alt="Confusion Matrix Train" width="600" style="margin-left:10px"/></div>
-<div width="50%" style="display:inline-block;vertical-align:top">
-<img src="./figures/p3/p3_clasificacion_knn_accuracy_test.png" alt="Accuracy Test" width="350"/><br/>
-<img src="./figures/p3/p3_clasificacion_knn_matrix_test.png" alt="Confusion Matrix Test" width="582" style="margin-left:10px"/></div>
-</div>
-
-## Validación Cruzada
-
-<img src="./figures/p3/p3_clasificacion_knn_mean_accuracy.png" alt="Mean accuracy after 10 attempts" width="650"/>
-<br/><br/>
-
-<img src="./figures/p3/p3_clasificacion_kfold.png" alt="Cross-Validation Results" width="1024"/>
-<br/><br/>
-
-## Curvas de Aprendizaje
-
-<img src="./figures/p3/p3_clasificacion_curva_aprendizaje_knn3.png" alt="Learning Curve for KNN with n_neighbors=3" width="800"/>
-<br/><br/>
-
-<img src="./figures/p3/p3_clasificacion_curva_aprendizaje_decisiontree.png" alt="Learning Curve for Decision Tree with C=5" width="800"/>
-<br/><br/>
-
-
-
-
 
 <!-- 12. **Uso de Scraping para Variables Exógenas**: El proyecto debe incluir el uso de técnicas de web scraping para obtener variables adicionales de fuentes externas que aporten valor a los datos originales del proyecto. -->
 
@@ -396,3 +395,6 @@ Probaremos primero con el modelo de clasificación supervisada _K-Nearest Neighb
 # Insights
 
 - A pesar de que el volumen de solicitudes _instant_ es mucho mayor, si observamos los 100 clientes que aportan mayor beneficio entonces adquieren mayor preponderancia las solicitudes _regular_ donde se ha cobrado una cuota por retraso en el pago (valor _pospone_ asignado artificialmente a `'fee_category'`).
+
+<img src="./figures/p3/p3_insights_top_users_pospone.png" alt="Top Users pospone" width="800"/>
+<br/><br/>
